@@ -32,15 +32,15 @@ func main() {
 		}
 		list = append(list, numbers)
 	}
-	var unsafeCount int
+	var safeCount int
 	for _, report := range list {
-		if !isValid(report) {
-			unsafeCount++
+		if isValid(report) {
+			safeCount++
 		}
 	}
-	fmt.Println(len(list) - unsafeCount)
+	fmt.Println(safeCount)
 
-	var safeCount int
+	safeCount = 0
 	for _, report := range list {
 		for i := 0; i < len(report); i++ {
 			// make slice without current level
