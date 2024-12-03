@@ -9,9 +9,8 @@ import (
 )
 
 func main() {
-	filePath := os.Args[1]
 	counter := 0
-	readFile, err := os.Open(filePath)
+	readFile, err := os.Open("../../inputs/01.txt")
 	if err != nil {
 		fmt.Println(err)
 	}
