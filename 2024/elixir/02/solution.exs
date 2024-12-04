@@ -5,38 +5,11 @@ defmodule Solution do
     @input_file
     |> read_file()
     |> Enum.map(&parse_line/1)
-    |> then(fn pairs ->
-      left =
-        pairs
-        |> Enum.map(&elem(&1, 0))
-        |> Enum.sort()
-
-      right =
-        pairs
-        |> Enum.map(&elem(&1, 1))
-        |> Enum.sort()
-
-      Enum.zip(left, right)
-    end)
-    |> Enum.reduce(0, fn {left, right}, acc -> abs(left - right) + acc end)
+    |> Enum.filter(&is_safe/1)
+    |> length()
   end
 
   def part_2() do
-    pairs =
-      @input_file
-      |> read_file()
-      |> Enum.map(&parse_line/1)
-
-    right_count =
-      pairs
-      |> Enum.map(&elem(&1, 1))
-      |> Enum.frequencies()
-
-    pairs
-    |> Enum.map(&elem(&1, 0))
-    |> Enum.reduce(0, fn val, acc ->
-      acc + val * Map.get(right_count, val, 0)
-    end)
   end
 
   defp read_file(file_name) do
@@ -46,15 +19,21 @@ defmodule Solution do
   end
 
   defp parse_line(row) do
-    row
-    |> String.split(" ", trim: true)
-    |> then(fn [left, right] ->
-      {
-        String.to_integer(left),
-        String.to_integer(right)
-      }
-    end)
+    Enum.map(String.split(row, " "), &String.to_integer/1)
   end
+
+  defp is_safe([a, b | _] = report) when a < b, do: is_safe(report, :asc)
+  defp is_safe([a, b | _] = report) when a > b, do: is_safe(report, :desc)
+  defp is_safe([a, b | _]), do: false
+
+  defp is_safe([a, b | rest], :asc) when abs(a - b) in 1..3 and a < b,
+    do: is_safe([b | rest], :asc)
+
+  defp is_safe([a, b | rest], :desc) when abs(a - b) in 1..3 and a > b,
+    do: is_safe([b | rest], :desc)
+
+  defp is_safe([_last], _), do: true
+  defp is_safe(_, _), do: false
 end
 
 out = Solution.part_1()
