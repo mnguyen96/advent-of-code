@@ -117,6 +117,8 @@ defmodule Solution do
     out1 = part_1(File.read!(@input_file))
     IO.puts("Part 1 Result: #{out1}")
     test_2()
+    out2 = part_2(File.read!(@input_file))
+    IO.puts("Part 2 Result: #{out2}")
   end
 end
 
